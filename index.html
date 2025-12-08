@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GR PROGRAM PRO 3.0</title>
+
+  <style>
+    :root {
+      --bg-page: #f5f6fa;
+      --bg-panel: #ffffff;
+      --bg-soft: #f9fafc;
+
+      --gold: #d9a643;
+      --gold-soft: #f7d98a;
+      --gold-light: #fff3c7;
+
+      --border-soft: #e0e3ec;
+      --border-strong: #c5c9d6;
+
+      --text-main: #22252f;
+      --text-sub: #6c7284;
+      --text-gray: #9aa0b3;
+
+      --danger: #ff5f6c;
+
+      --radius-lg: 20px;
+      --radius-md: 14px;
+
+      --shadow-soft: 0 10px 30px rgba(9, 9, 30, 0.10);
+      --transition-fast: 0.18s ease-out;
+
+      --ripple-x: 50%;
+      --ripple-y: 50%;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #ffffff 0, #f6f7fb 45%, #e4e9f7 100%);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    /* 斜線微亮紋路 */
+    .bg-rays {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(180, 187, 207, 0.35) 0,
+          rgba(180, 187, 207, 0.35) 1px,
+          transparent 3px,
+          transparent 10px
+        );
+      opacity: 0.06;
+      z-index: 0;
+    }
+
+    /* 大範圍柔光 */
+    .bg-glow {
+      position: fixed;
+      inset: -30%;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(247, 217, 138, 0.55), transparent 60%),
+        radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.95), transparent 55%),
+        radial-gradient(circle at 90% 100%, rgba(197, 208, 240, 0.55), transparent 55%);
+      mix-blend-mode: screen;
+      animation: glowMove 18s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    @keyframes glowMove {
+      0%   { transform: translate3d(-4%, 0, 0) scale(1); }
+      50%  { transform: translate3d(4%, -2%, 0) scale(1.03); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.01); }
+    }
+
+    /* ⭐ 金色星空點點 */
+    .bg-stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(rgba(247, 217, 138, 0.95) 0.9px, transparent 0.9px) 0 0 / 3px 3px,
+        radial-gradient(rgba(255, 243, 199, 0.95) 1.1px, transparent 1.1px) 40px 60px / 4px 4px,
+        transparent;
+      opacity: 0.36;
+      mix-blend-mode: soft-light;
+      z-index: 0;
+      animation: starsDrift 40s linear infinite alternate;
+    }
+
+    @keyframes starsDrift {
+      0%   { transform: translate3d(0, 0, 0); }
+      50%  { transform: translate3d(-25px, 15px, 0); }
+      100% { transform: translate3d(20px, -10px, 0); }
+    }
+
+    /* 🌠 多條金色弧形流星（手機也看得到，速度/時間隨機） */
+    .bg-meteors {
+      position: fixed;
+      inset: -10%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .meteor-trail {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 260px;
+      height: 3px;
+      background: linear-gradient(
+        90deg,
+        rgba(247, 217, 138, 0),
+        rgba(247, 217, 138, 1),
+        rgba(247, 217, 138, 0)
+      );
+      opacity: 0;
+      border-radius: 999px;
+      filter: drop-shadow(0 0 10px rgba(247, 217, 138, 0.9));
+      transform-origin: left center;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    /* 三種不同弧線路徑 */
+    @keyframes meteorCurve1 {
+      0%   { transform: translate3d(0, 0, 0) rotate(22deg);  opacity: 0; }
+      10%  { opacity: 1; }
+      45%  { transform: translate3d(-260px, 120px, 0) rotate(26deg); opacity: 1; }
+      100% { transform: translate3d(-520px, 260px, 0) rotate(30deg); opacity: 0; }
+    }
+
+    @keyframes meteorCurve2 {
+      0%   { transform: translate3d(0, 0, 0) rotate(30deg);  opacity: 0; }
+      12%  { opacity: 1; }
+      50%  { transform: translate3d(-220px, 160px, 0) rotate(26deg); opacity: 1; }
+      100% { transform: translate3d(-480px, 320px, 0) rotate(22deg); opacity: 0; }
+    }
+
+    @keyframes meteorCurve3 {
+      0%   { transform: translate3d(0, 0, 0) rotate(18deg);  opacity: 0; }
+      8%   { opacity: 1; }
+      40%  { transform: translate3d(-200px, 90px, 0) rotate(24deg); opacity: 1; }
+      100% { transform: translate3d(-450px, 250px, 0) rotate(30deg); opacity: 0; }
+    }
+
+    .meteor-curve-1 { animation-name: meteorCurve1; }
+    .meteor-curve-2 { animation-name: meteorCurve2; }
+    .meteor-curve-3 { animation-name: meteorCurve3; }
+
+    /* 金色漣漪（滑到卡片） */
+    .ripple-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        circle at var(--ripple-x) var(--ripple-y),
+        rgba(247, 217, 138, 0.7) 0%,
+        rgba(247, 217, 138, 0.45) 13%,
+        rgba(247, 217, 138, 0.18) 34%,
+        transparent 72%
+      );
+      opacity: 0;
+      transform: scale(0.7);
+      z-index: 2;
+    }
+
+    .ripple-overlay.active {
+      animation: ripple 0.9s ease-out forwards;
+    }
+
+    @keyframes ripple {
+      0% {
+        opacity: 0.6;
+        transform: scale(0.7);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(2.4);
+      }
+    }
+
+    .app {
+      position: relative;
+      z-index: 3;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 16px 32px;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .center-layout {
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .panel {
+      width: 100%;
+      max-width: 520px;
+      padding: 26px 22px 20px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-panel);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .title-lg {
+      text-align: left;
+      font-size: 22px;
+      letter-spacing: 3px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--gold);
+    }
+
+    .subtitle {
+      text-align: left;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-gray);
+      margin-bottom: 22px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .input {
+      width: 100%;
+      padding: 10px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: #f9fafc;
+      color: var(--text-main);
+      font-size: 14px;
+      margin-bottom: 12px;
+      outline: none;
+      transition: var(--transition-fast);
+    }
+
+    .input::placeholder { color: var(--text-gray); }
+
+    .input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px rgba(217, 166, 67, 0.6);
+      background: #ffffff;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(120deg, #ffe9b6, #f0c56a);
+      color: #5b3a04;
+      box-shadow: 0 10px 20px rgba(209, 167, 72, 0.4);
+      margin-top: 4px;
+    }
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+      box-shadow: 0 13px 28px rgba(209, 167, 72, 0.55);
+    }
+
+    .btn-outline {
+      width: 100%;
+      margin-top: 8px;
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      color: var(--text-sub);
+    }
+    .btn-outline:hover { background: #f5f6fa; }
+
+    .btn-danger {
+      background: #ff6f7f;
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(255, 111, 127, 0.4);
+    }
+    .btn-danger:hover { filter: brightness(1.03); }
+
+    .error-box {
+      margin-top: 10px;
+      padding: 8px 11px;
+      border-radius: var(--radius-md);
+      background: #ffe8ea;
+      border: 1px solid #ffadb5;
+      color: #bc2033;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* 授權碼後台 */
+    .admin-panel {
+      margin-top: 16px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-soft);
+      display: none;
+    }
+    .admin-panel.active { display: block; }
+
+    .admin-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .admin-input-row .input {
+      margin-bottom: 0;
+      flex: 1 1 150px;
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 11px;
+    }
+
+    .code-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+    .code-table th,
+    .code-table td {
+      padding: 5px 4px;
+      border-bottom: 1px solid #edf0f5;
+      text-align: left;
+    }
+
+    .badge-empty {
+      font-size: 11px;
+      color: var(--text-gray);
+      margin-top: 4px;
+    }
+
+    /* 選擇遊戲頁 */
+    .game-panel {
+      max-width: 720px;
+      padding: 20px 18px 18px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      background: var(--bg-panel);
+      box-shadow: var(--shadow-soft);
+      margin: 0 auto;
+    }
+
+    .title-md {
+      text-align: left;
+      font-size: 20px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      color: var(--gold);
+    }
+
+    .game-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .game-card {
+      flex: 1 1 48%;
+      border-radius: 18px;
+      border: 1px solid var(--border-soft);
+      background: linear-gradient(135deg, #ffffff, #f8fafc);
+      padding: 14px 13px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      box-shadow: 0 6px 12px rgba(26, 26, 66, 0.06);
+    }
+
+    .game-card:hover {
+      box-shadow: 0 9px 18px rgba(26, 26, 66, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .game-card.active {
+      border-color: var(--gold);
+      box-shadow:
+        0 0 0 1px rgba(217, 166, 67, 0.8),
+        0 10px 22px rgba(217, 166, 67, 0.35);
+    }
+
+    .game-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .note-box {
+      margin-top: 14px;
+      padding: 9px 11px;
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-soft);
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .confirm-game-btn {
+      margin-top: 16px;
+    }
+
+    /* 機台列表頁 */
+    .page-header {
+      margin-bottom: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .title-page {
+      font-size: 20px;
+      letter-spacing: 3px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      font-size: 11px;
+      color: var(--text-sub);
+      box-shadow: 0 4px 8px rgba(26, 26, 66, 0.06);
+    }
+
+    .top-actions {
+      margin: 10px auto 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .select-wrap { position: relative; min-width: 160px; }
+
+    .select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      width: 100%;
+      padding: 8px 30px 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      color: var(--text-main);
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(26, 26, 66, 0.06);
+    }
+    .select option {
+      background-color: #ffffff;
+      color: var(--text-main);
+    }
+
+    .select-arrow {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      font-size: 10px;
+      color: var(--text-gray);
+    }
+
+    .machine-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+    }
+
+    .machine-card {
+      position: relative;
+      border-radius: 16px;
+      padding: 10px 12px;
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      color: var(--text-main);
+      box-shadow: 0 7px 16px rgba(26, 26, 66, 0.08);
+      transition: var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .machine-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(26, 26, 66, 0.12);
+    }
+
+    .machine-card.selected {
+      outline: 2px solid rgba(217, 166, 67, 0.7);
+      outline-offset: 2px;
+    }
+
+    .machine-id {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .machine-rate {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    /* JP / 覺醒額外行 */
+    .machine-rate-extra {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 1px;
+    }
+
+    .machine-card.high-rate {
+      border-color: var(--gold);
+      box-shadow:
+        0 0 0 1px rgba(217, 166, 67, 0.8),
+        0 12px 24px rgba(217, 166, 67, 0.35);
+    }
+
+    .top-badge {
+      position: absolute;
+      top: -8px;
+      right: 10px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #ffeec5, #f5c86f);
+      color: #5c3b0a;
+      box-shadow: 0 4px 10px rgba(214, 164, 73, 0.6);
+    }
+    .top-badge.top-2 {
+      background: linear-gradient(135deg, #f3f7ff, #cfd8f0);
+      color: #364063;
+    }
+    .top-badge.top-3 {
+      background: linear-gradient(135deg, #ffecd6, #f3b984);
+      color: #5a3212;
+    }
+
+    /* Modal：購買訊號 */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.95), rgba(215, 222, 238, 0.96));
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 25;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .signal-modal {
+      width: min(640px, 92vw);
+      border-radius: 22px;
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      box-shadow:
+        0 16px 40px rgba(26, 26, 66, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.6);
+      padding: 18px 18px 16px;
+      position: relative;
+      animation: modalIn 0.22s ease-out;
+      color: var(--text-main);
+    }
+
+    @keyframes modalIn {
+      0%   { opacity: 0; transform: translateY(8px) scale(0.97); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .signal-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .signal-title {
+      font-size: 20px;
+      letter-spacing: 3px;
+      font-weight: 700;
+      color: var(--gold);
+      text-align: center;
+    }
+
+    .signal-close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: #f5f6fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--text-gray);
+    }
+
+    .signal-list {
+      margin: 4px 0 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .signal-item {
+      display: flex;
+      align-items: center;
+      padding: 9px 11px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #ffffff, #f7f8fd);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 6px 14px rgba(26, 26, 66, 0.08);
+      opacity: 0;
+      transform: translateY(5px);
+      animation: itemIn 0.3s ease-out forwards;
+      animation-delay: var(--delay, 0ms);
+    }
+
+    @keyframes itemIn {
+      0%   { opacity: 0; transform: translateY(5px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .signal-icon-wrapper {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      flex-shrink: 0;
+      box-shadow: 0 6px 12px rgba(26, 26, 66, 0.12);
+    }
+
+    /* 圖片版 icon */
+    .signal-icon-img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .signal-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .signal-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .signal-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .signal-qty {
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, #fff0c5, #f2c873);
+      color: #5b3907;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 6px 14px rgba(217, 166, 67, 0.4);
+    }
+
+    .signal-footer { margin-top: 2px; }
+
+    .signal-tip {
+      padding: 8px 11px;
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      background: #f9fafc;
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+    .signal-tip b { color: var(--gold); }
+
+    .signal-confirm {
+      width: 100%;
+      border-radius: 999px;
+      border: none;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      background: linear-gradient(120deg, #ffe9b6, #f0c56a);
+      color: #5b3a04;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(209, 167, 72, 0.4);
+      transition: var(--transition-fast);
+    }
+    .signal-confirm:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    /* Loading */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.96), rgba(228, 233, 245, 0.96));
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+    .loading-overlay.active { display: flex; }
+
+    .loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 3px solid rgba(198, 204, 221, 0.4);
+      border-top-color: var(--gold);
+      animation: spin 0.8s linear infinite;
+    }
+    .loader-text {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 768px) {
+      .app { padding: 18px 12px 28px; }
+      .panel, .game-panel { padding: 20px 16px 14px; }
+      .title-lg { font-size: 20px; }
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .chip-row { justify-content: flex-start; }
+      .machine-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+  </style>
+
+  <!-- Firebase compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <!-- 背景層 -->
+  <div class="bg-rays"></div>
+  <div class="bg-stars"></div>
+  <div class="bg-glow"></div>
+  <div class="bg-meteors" id="bgMeteors"></div>
+  <div class="ripple-overlay" id="rippleOverlay"></div>
+
+  <!-- Loading -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader">
+      <div class="spinner"></div>
+      <div class="loader-text">系統分析中，請稍候…</div>
+    </div>
+  </div>
+
+  <!-- 購買訊號 Modal -->
+  <div class="modal-overlay" id="signalModal">
+    <div class="signal-modal">
+      <div class="signal-header">
+        <div class="signal-title" id="signalTitle">第 0000 房購買訊號</div>
+        <button class="signal-close" id="signalClose">✕</button>
+      </div>
+      <div class="signal-list" id="signalItemList"></div>
+      <div class="signal-footer">
+        <div class="signal-tip">
+          <b>系統提示：</b>
+          此購買訊號為 AI 智能生成，建議參考爆分率
+          <b id="signalRateText">75%</b> 進行分析。
+        </div>
+        <button class="signal-confirm" id="signalConfirm">確認</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="app">
+    <!-- Screen 1：登入 -->
+    <div class="screen active" id="screenLogin">
+      <div class="center-layout">
+        <div class="panel">
+          <div class="title-lg">PROGRAM PRO 3.0</div>
+          <div class="subtitle">AUTHENTICATION · ACCESS CONTROL</div>
+
+          <label>系統授權碼</label>
+          <input id="licenseInput" class="input" placeholder="請輸入授權碼" />
+
+          <label>平台帳號</label>
+          <input id="accountInput" class="input" placeholder="請輸入遊戲帳號" />
+
+          <label>進場金額</label>
+          <input id="amountInput" class="input" type="number" min="0" placeholder="請輸入進場金額" />
+
+          <button class="btn btn-primary" id="btnVerify">驗證並進入系統</button>
+          <button class="btn btn-outline" id="btnToggleAdmin">管理授權碼</button>
+
+          <div class="error-box" id="loginError" style="display:none;">
+            授權碼無效：序號不存在或已過期
+          </div>
+
+          <!-- 授權碼管理後台 -->
+          <div class="admin-panel" id="adminPanel">
+            <div class="admin-title">
+              授權碼管理後台
+              <span style="font-size:11px;color:var(--text-gray);">（管理密碼：aa888）</span>
+            </div>
+            <div class="admin-input-row">
+              <input id="adminCodeInput" class="input" placeholder="授權碼，例如 GC-2025-001" />
+              <input id="adminExpireInput" class="input" type="date" />
+              <button class="btn btn-primary btn-sm" id="btnAddCode">新增</button>
+            </div>
+            <table class="code-table">
+              <thead>
+              <tr><th>授權碼</th><th>到期日</th><th>操作</th></tr>
+              </thead>
+              <tbody id="codeTableBody"></tbody>
+            </table>
+            <div class="badge-empty" id="emptyCodesHint">尚未建立任何授權碼。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 2：選擇遊戲 -->
+    <div class="screen" id="screenGame">
+      <div class="center-layout">
+        <div class="game-panel">
+          <div class="title-md">選擇遊戲模組</div>
+          <div class="game-list">
+            <div class="game-card" data-id="ATG1">
+              <div class="game-name">ATG-戰神賽特</div>
+            </div>
+            <div class="game-card" data-id="ATG2">
+              <div class="game-name">ATG-戰神賽特2覺醒之力</div>
+            </div>
+          </div>
+
+          <div class="note-box">
+            選定遊戲後會自動獲取遊戲數據並提供分析，隨時可用「切換遊戲」重新選擇遊戲。
+          </div>
+
+          <button class="btn btn-primary confirm-game-btn" id="btnGameConfirm" disabled>開始分析</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 3：機台列表 -->
+    <div class="screen" id="screenDashboard">
+      <div class="page-header">
+        <div class="title-page" id="titlePage">GR專用戰神賽特</div>
+        <div class="chip-row">
+          <div class="chip" id="chipAccount">帳號：-</div>
+          <div class="chip" id="chipAmount">金額：-</div>
+          <div class="chip" id="chipGame">當前遊戲：-</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn btn-primary" id="btnRefresh">點此更新數據</button>
+        <div class="select-wrap">
+          <select class="select" id="gameSelect">
+            <option value="">切換遊戲</option>
+            <option value="ATG1">ATG-戰神賽特</option>
+            <option value="ATG2">ATG-戰神賽特2覺醒之力</option>
+          </select>
+          <span class="select-arrow">▼</span>
+        </div>
+        <button class="btn btn-danger" id="btnLogout">登出系統</button>
+      </div>
+
+      <div class="machine-grid" id="machineGrid"></div>
+    </div>
+  </div>
+
+  <script>
+
+     
+    function showLoading(ms = 400) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function showScreen(name) {
+  const loginScreen     = document.getElementById("screenLogin");
+  const gameScreen      = document.getElementById("screenGame");
+  const dashboardScreen = document.getElementById("screenDashboard");
+
+  if (!loginScreen || !gameScreen || !dashboardScreen) {
+    console.warn("找不到畫面容器：screenLogin / screenGame / screenDashboard");
+    return;
+  }
+
+  loginScreen.classList.remove("active");
+  gameScreen.classList.remove("active");
+  dashboardScreen.classList.remove("active");
+
+  if (name === "login") {
+    loginScreen.classList.add("active");
+  } else if (name === "game") {
+    gameScreen.classList.add("active");
+  } else if (name === "dashboard") {
+    dashboardScreen.classList.add("active");
+  }
+}
+
+
+     // ✅ 防止 showLoading 未定義導致整個系統當機
+function showLoading(ms = 400) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+
+    // Firebase 設定 & 初始化
+    const firebaseConfig = {
+      apiKey: "AIzaSyDNs7BP2h51PzsJZ9Lro0Ev1nzyqZM-1Qs",
+      authDomain: "gg-pro-3.firebaseapp.com",
+      projectId: "gg-pro-3",
+      storageBucket: "gg-pro-3.firebasestorage.app",
+      messagingSenderId: "460046000234",
+      appId: "1:460046000234:web:e1c72ba1758376ce582a13",
+      measurementId: "G-5Z31YLQERV"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+
+    const STORAGE_KEY    = "ofa_license_codes";
+    const ADMIN_PASSWORD = "aa888";
+    const MACHINE_COUNT  = 60;
+
+    const GAME_CONFIG = {
+      ATG1: { name: "ATG-戰神賽特",         title: "GR專用戰神賽特",   maxMachine: 4300 },
+      ATG2: { name: "ATG-戰神賽特2覺醒之力", title: "GR專用戰神賽特2", maxMachine: 3500 }
+    };
+
+    // 道具資料（保留你原本的名稱＆提示文字）
+const SIGNAL_ITEMS = [
+  { id: "eye",     name: "眼",       sub: "高機率特殊圖示" },
+  { id: "snake",   name: "蛇",       sub: "多線連動時表現佳" },
+  { id: "knife",   name: "彎刀",     sub: "高倍線型轉折關鍵" },
+  { id: "bow",     name: "弓箭",     sub: "搭配眼圖時爆分加成" },
+
+  { id: "blue",    name: "藍寶石",   sub: "穩定線型補圖" },
+  { id: "green",   name: "綠寶石",   sub: "連線延伸機率提升" },
+  { id: "purple",  name: "紫寶石",   sub: "高價值寶石組合" },
+  { id: "red",     name: "紅寶石",   sub: "中段爆擊觸發點" },
+  { id: "yellow",  name: "黃寶石",   sub: "中高倍補圖" },
+
+  { id: "scatter", name: "SCATTER",  sub: "高爆分關鍵觸發符號" }
+];
+
+// 根據你的新規則回傳「最大數量」
+function getMaxQtyForItem(itemId) {
+  // 眼睛 / 蛇 / 彎刀 / 弓箭 在 5 個以內
+  if (["eye", "snake", "knife", "bow"].includes(itemId)) {
+    return 5;
+  }
+  // 寶石類 在 7 個以內
+  if (["blue", "green", "purple", "red", "yellow"].includes(itemId)) {
+    return 7;
+  }
+  // 甲蟲（SCATTER）在 3 個以內
+  if (itemId === "scatter") {
+    return 3;
+  }
+  // 保險：其他沒列到的一律上限 6
+  return 6;
+}
+
+// 修改購買訊號數量
+function openSignalModal(machineNo, rate) {
+  signalTitle.textContent = `第 ${machineNo} 房購買訊號`;
+
+  // 洗牌＋隨機取 3 個道具
+  const shuffled = [...SIGNAL_ITEMS].sort(() => Math.random() - 0.5);
+  const picked   = shuffled.slice(0, 3);
+
+  signalItemList.innerHTML = "";
+
+  picked.forEach((item, idx) => {
+    const maxQty = getMaxQtyForItem(item.id);
+    const qty    = rand(1, maxQty);      // 1 ~ 對應上限
+
+    const row = document.createElement("div");
+    row.className = "signal-item";
+    row.style.setProperty("--delay", `${idx * 70}ms`);
+
+    // 左邊 icon：使用對應圖片，檔名請放在 images 資料夾，例如 images/eye.png
+    const iconWrap = document.createElement("div");
+    iconWrap.className = "signal-icon-wrapper";
+    const icon = document.createElement("img");
+    icon.className = "signal-icon";
+    icon.src = `images/${item.id}.png`;
+    icon.alt = item.name || "";
+    iconWrap.appendChild(icon);
+
+    // 中間文字
+    const textWrap = document.createElement("div");
+    textWrap.className = "signal-text";
+    const nameEl = document.createElement("div");
+    nameEl.className = "signal-name";
+    nameEl.textContent = item.name;
+    const subEl = document.createElement("div");
+    subEl.className = "signal-sub";
+    subEl.textContent = item.sub;
+    textWrap.appendChild(nameEl);
+    textWrap.appendChild(subEl);
+
+    // 右邊數量
+    const qtyPill = document.createElement("div");
+    qtyPill.className = "signal-qty";
+    qtyPill.textContent = `× ${qty}`;
+
+    row.append(iconWrap, textWrap, qtyPill);
+    signalItemList.appendChild(row);
+  });
+
+  // 底下那個建議參考爆分率 XX%
+  signalRateText.textContent = rate + "%";
+
+  signalModal.classList.add("active");
+}
+
+
+    function triggerRipple(event) {
+      const x = event.clientX;
+      const y = event.clientY;
+      document.documentElement.style.setProperty("--ripple-x", x + "px");
+      document.documentElement.style.setProperty("--ripple-y", y + "px");
+      rippleOverlay.classList.remove("active");
+      void rippleOverlay.offsetWidth;
+      rippleOverlay.classList.add("active");
+    }
+
+    const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+    // Modal：購買訊號（已改成圖片）
+    function openSignalModal(machineNo, rate) {
+      signalTitle.textContent = `第 ${machineNo} 房購買訊號`;
+
+      const shuffled = [...SIGNAL_ITEMS].sort(() => Math.random() - 0.5);
+      const picked   = shuffled.slice(0, 3);
+
+      // 根據符號種類決定數量上限
+      const getMaxQty = (id) => {
+        // 眼睛 / 蛇 / 彎刀 / 弓箭：1 ~ 5
+        if (id === "eye" || id === "snake" || id === "knife" || id === "bow") {
+          return 5;
+        }
+        // 寶石類：1 ~ 7
+        if (id === "blue" || id === "green" || id === "purple" || id === "yellow" || id === "red") {
+          return 7;
+        }
+        // 甲蟲（SCATTER）：1 ~ 3
+        if (id === "scatter") {
+          return 3;
+        }
+        // 安全預設：1 ~ 6
+        return 6;
+      };
+
+      signalItemList.innerHTML = "";
+      picked.forEach((item, idx) => {
+        const maxQty = getMaxQty(item.id);
+        const qty    = rand(1, maxQty);
+
+        const row = document.createElement("div");
+        row.className = "signal-item";
+        row.style.setProperty("--delay", `${idx * 70}ms`);
+
+        const iconWrap = document.createElement("div");
+        iconWrap.className = "signal-icon-wrapper";
+
+        const img = document.createElement("img");
+        img.className = "signal-icon-img";
+        img.src = item.icon;
+        img.alt = item.name;
+        iconWrap.appendChild(img);
+
+        const textWrap = document.createElement("div");
+        textWrap.className = "signal-text";
+        const name = document.createElement("div");
+        name.className = "signal-name";
+        name.textContent = item.name;
+        const sub = document.createElement("div");
+        sub.className = "signal-sub";
+        sub.textContent = item.sub;
+        textWrap.appendChild(name);
+        textWrap.appendChild(sub);
+
+        const qtyPill = document.createElement("div");
+        qtyPill.className = "signal-qty";
+        qtyPill.textContent = `× ${qty}`;
+
+        row.append(iconWrap, textWrap, qtyPill);
+        signalItemList.appendChild(row);
+      });
+
+      signalRateText.textContent = rate + "%";
+      signalModal.classList.add("active");
+    }
+const closeSignalModal = () => signalModal.classList.remove("active");
+    document.getElementById("signalClose").onclick   = closeSignalModal;
+    document.getElementById("signalConfirm").onclick = closeSignalModal;
+    signalModal.addEventListener("click", e => { if (e.target === signalModal) closeSignalModal(); });
+
+    
+// 授權碼存取（改用 Firestore）
+async function isLicenseValid(code) {
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    const snapshot = await db.collection("licenses")
+      .where("code", "==", code)
+      .get();
+    if (snapshot.empty) return false;
+    let valid = false;
+    snapshot.forEach(doc => {
+      const data = doc.data() || {};
+      const expire = (data.expire || "").trim();
+      if (!expire || expire >= today) {
+        valid = true;
+      }
+    });
+    return valid;
+  } catch (err) {
+    console.error("檢查授權碼失敗", err);
+    return false;
+  }
+}
+
+const licenseInput = document.getElementById("licenseInput");
+const accountInput = document.getElementById("accountInput");
+const amountInput  = document.getElementById("amountInput");
+const loginError   = document.getElementById("loginError");
+
+document.getElementById("btnVerify").addEventListener("click", async () => {
+  const code = licenseInput.value.trim();
+  if (!code) {
+    loginError.textContent = "請先輸入授權碼";
+    loginError.style.display = "block";
+    return;
+  }
+  const ok = await isLicenseValid(code);
+  if (!ok) {
+    loginError.textContent = "授權碼無效：序號不存在或已過期";
+    loginError.style.display = "block";
+    return;
+  }
+  localStorage.setItem("ofa_account", accountInput.value.trim() || "未設定");
+  localStorage.setItem("ofa_amount",  amountInput.value.trim()  || "-");
+  loginError.style.display = "none";
+  await showLoading();
+  showScreen("game");
+});
+
+const adminPanel       = document.getElementById("adminPanel");
+let   adminUnlocked    = false;
+const adminCodeInput   = document.getElementById("adminCodeInput");
+const adminExpireInput = document.getElementById("adminExpireInput");
+const codeTableBody    = document.getElementById("codeTableBody");
+const emptyCodesHint   = document.getElementById("emptyCodesHint");
+
+document.getElementById("btnToggleAdmin").addEventListener("click", () => {
+  if (!adminUnlocked) {
+    const pwd = prompt("請輸入管理者密碼：");
+    if (pwd !== ADMIN_PASSWORD) { alert("密碼錯誤"); return; }
+    adminUnlocked = true;
+  }
+  adminPanel.classList.toggle("active");
+  if (adminPanel.classList.contains("active")) {
+    renderCodeTable();
+  }
+});
+
+async function renderCodeTable() {
+  codeTableBody.innerHTML = "";
+  emptyCodesHint.style.display = "none";
+
+  try {
+    const snapshot = await db.collection("licenses")
+      .orderBy("code")
+      .get();
+
+    if (snapshot.empty) {
+      emptyCodesHint.textContent = "尚未建立任何授權碼。";
+      emptyCodesHint.style.display = "block";
+      return;
+    }
+
+    snapshot.forEach(doc => {
+      const data = doc.data() || {};
+      const tr    = document.createElement("tr");
+      const tdC   = document.createElement("td");
+      const tdE   = document.createElement("td");
+      const tdAct = document.createElement("td");
+
+      tdC.textContent = data.code || "(無代碼)";
+      tdE.textContent = (data.expire || "").trim() || "-";
+
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "刪除";
+      delBtn.className   = "btn btn-danger btn-sm";
+      delBtn.onclick     = async () => {
+        if (!confirm(`確定要刪除授權碼「${data.code}」嗎？`)) return;
+        try {
+          await db.collection("licenses").doc(doc.id).delete();
+          renderCodeTable();
+        } catch (err) {
+          console.error("刪除授權碼失敗", err);
+          alert("刪除授權碼失敗，請稍後再試");
+        }
+      };
+
+      tdAct.appendChild(delBtn);
+      tr.append(tdC, tdE, tdAct);
+      codeTableBody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error("讀取授權碼列表失敗", err);
+    emptyCodesHint.textContent = "讀取授權碼失敗，請稍後再試。";
+    emptyCodesHint.style.display = "block";
+  }
+}
+
+document.getElementById("btnAddCode").addEventListener("click", async () => {
+  const code   = adminCodeInput.value.trim();
+  const expire = adminExpireInput.value.trim();
+
+  if (!code) {
+    alert("請輸入授權碼");
+    return;
+  }
+
+  try {
+    // 檢查是否重複
+    const dupSnap = await db.collection("licenses")
+      .where("code", "==", code)
+      .get();
+
+    if (!dupSnap.empty) {
+      alert("此授權碼已存在");
+      return;
+    }
+
+    await db.collection("licenses").add({
+      code,
+      expire
+    });
+
+    adminCodeInput.value   = "";
+    adminExpireInput.value = "";
+    alert("已新增授權碼");
+    renderCodeTable();
+  } catch (err) {
+    console.error("新增授權碼失敗", err);
+    alert("新增授權碼失敗，請稍後再試");
+  }
+});
+
+// 選遊戲
+    let selectedGameId = null;
+    const gameCards      = document.querySelectorAll(".game-card");
+    const btnGameConfirm = document.getElementById("btnGameConfirm");
+
+    gameCards.forEach(card => {
+      card.addEventListener("click", () => {
+        gameCards.forEach(c => c.classList.remove("active"));
+        card.classList.add("active");
+        selectedGameId = card.dataset.id;
+        btnGameConfirm.disabled = false;
+      });
+    });
+
+    btnGameConfirm.addEventListener("click", async () => {
+      if (!selectedGameId) return;
+      localStorage.setItem("ofa_selected_game", selectedGameId);
+      await showLoading();
+      initDashboard();
+      showScreen("dashboard");
+    });
+
+    // 機台列表
+    const titlePage   = document.getElementById("titlePage");
+    const chipAccount = document.getElementById("chipAccount");
+    const chipAmount  = document.getElementById("chipAmount");
+    const chipGame    = document.getElementById("chipGame");
+    const machineGrid = document.getElementById("machineGrid");
+    const gameSelect  = document.getElementById("gameSelect");
+
+    function getCurrentGameConfig() {
+      const id = selectedGameId || localStorage.getItem("ofa_selected_game") || "ATG1";
+      selectedGameId = id;
+      return GAME_CONFIG[id] || GAME_CONFIG.ATG1;
+    }
+
+    function generateMachines() {
+      const cfg  = getCurrentGameConfig();
+      const used = new Set();
+      const list = [];
+
+      while (list.length < MACHINE_COUNT) {
+        const num = rand(1, cfg.maxMachine);
+        if (used.has(num)) continue;
+        used.add(num);
+
+        const rate       = rand(60, 89);       // 大獎爆分率
+        const jpRate     = rand(60, 90);       // JP 彩池命中率 60~90
+        const awakenRate = (cfg === GAME_CONFIG.ATG2)
+          ? rand(30, 90)                       // 覺醒機率 30~90（只在賽特2）
+          : null;
+
+        list.push({ no: num, rate, jpRate, awakenRate });
+      }
+
+      const sorted = [...list].sort((a, b) => b.rate - a.rate);
+      const t1 = sorted[0], t2 = sorted[1], t3 = sorted[2];
+
+      machineGrid.innerHTML = "";
+      list.forEach(m => {
+        const card = document.createElement("div");
+        card.className = "machine-card";
+        if (m.rate >= 80) card.classList.add("high-rate");
+
+        if (t1 && m.no === t1.no) {
+          const b = document.createElement("div");
+          b.className = "top-badge";
+          b.textContent = "TOP 1";
+          card.appendChild(b);
+        } else if (t2 && m.no === t2.no) {
+          const b = document.createElement("div");
+          b.className = "top-badge top-2";
+          b.textContent = "TOP 2";
+          card.appendChild(b);
+        } else if (t3 && m.no === t3.no) {
+          const b = document.createElement("div");
+          b.className = "top-badge top-3";
+          b.textContent = "TOP 3";
+          card.appendChild(b);
+        }
+
+        const idEl   = document.createElement("div");
+        idEl.className = "machine-id";
+        idEl.textContent = "第 " + m.no + " 台";
+
+        const rateEl = document.createElement("div");
+        rateEl.className = "machine-rate";
+        rateEl.textContent = "大獎爆分率 " + m.rate + "%";
+
+        const jpEl = document.createElement("div");
+        jpEl.className = "machine-rate-extra";
+        jpEl.textContent = "JP彩池命中率 " + m.jpRate + "%";
+
+        card.append(idEl, rateEl, jpEl);
+
+        if (m.awakenRate !== null && m.awakenRate !== undefined) {
+          const awakenEl = document.createElement("div");
+          awakenEl.className = "machine-rate-extra";
+          awakenEl.textContent = "覺醒機率 " + m.awakenRate + "%";
+          card.appendChild(awakenEl);
+        }
+
+        card.addEventListener("mouseenter", triggerRipple);
+        card.addEventListener("click", () => {
+          document.querySelectorAll(".machine-card.selected")
+            .forEach(c => c.classList.remove("selected"));
+          card.classList.add("selected");
+          openSignalModal(m.no, m.rate);
+        });
+
+        machineGrid.appendChild(card);
+      });
+    }
+
+    function initDashboard() {
+      const cfg     = getCurrentGameConfig();
+      const account = localStorage.getItem("ofa_account") || "未設定";
+      const amount  = localStorage.getItem("ofa_amount")  || "-";
+
+      titlePage.textContent   = cfg.title;
+      chipAccount.textContent = "帳號：" + account;
+      chipAmount.textContent  = "金額：" + amount;
+      chipGame.textContent    = "當前遊戲：" + cfg.name;
+
+      generateMachines();
+    }
+
+    document.getElementById("btnRefresh").onclick = () => generateMachines();
+
+    gameSelect.addEventListener("change", async e => {
+      const val = e.target.value;
+      if (!val) return;
+      selectedGameId = val;
+      localStorage.setItem("ofa_selected_game", val);
+      await showLoading(400);
+      initDashboard();
+      gameSelect.value = "";
+    });
+
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+      await showLoading(400);
+      showScreen("login");
+    });
+
+    // ⭐ 初始化多條金色弧形流星（手機也 OK）
+    function initMeteorTrails() {
+      const container = document.getElementById("bgMeteors");
+      if (!container) return;
+
+      const trailCount = 10;  // 想再多可以改成 12、14
+      for (let i = 0; i < trailCount; i++) {
+        const el = document.createElement("div");
+        el.classList.add("meteor-trail");
+
+        const curveType = rand(1, 3);
+        el.classList.add(`meteor-curve-${curveType}`);
+
+        const leftPercent = rand(-10, 110);
+        const topPercent  = rand(-20, 40);
+
+        el.style.left = leftPercent + "%";
+        el.style.top  = topPercent  + "%";
+
+        const duration = rand(2, 7);
+        const delay    = rand(0, 12);
+        el.style.animationDuration = duration + "s";
+        el.style.animationDelay    = delay    + "s";
+
+        container.appendChild(el);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initMeteorTrails();
+    });
+  </script>
+</body>
+</html>
