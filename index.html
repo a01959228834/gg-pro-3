@@ -6,6 +6,9 @@
   <title>GR PROGRAM PRO 3.0</title>
 
   <style>
+    /* =========================================
+       1. 核心樣式 (維持原貌，不動)
+       ========================================= */
     :root {
       --bg-page: #f5f6fa;
       --bg-panel: #ffffff;
@@ -14,55 +17,45 @@
       --gold-soft: #f7d98a;
       --gold-light: #fff3c7;
       --border-soft: #e0e3ec;
-      --border-strong: #c5c9d6;
       --text-main: #22252f;
       --text-sub: #6c7284;
-      --text-gray: #9aa0b3;
       --danger: #ff5f6c;
       --radius-lg: 20px;
-      --radius-md: 14px;
       --shadow-soft: 0 10px 30px rgba(9, 9, 30, 0.10);
       --transition-fast: 0.18s ease-out;
-      --ripple-x: 50%;
-      --ripple-y: 50%;
     }
 
     * { box-sizing: border-box; }
-
     body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0; min-height: 100vh; font-family: "Noto Sans TC", sans-serif;
       background: linear-gradient(180deg, #ffffff 0, #f6f7fb 45%, #e4e9f7 100%);
-      color: var(--text-main);
-      overflow-x: hidden;
+      color: var(--text-main); overflow-x: hidden;
     }
 
-    /* 背景特效 */
+    /* 背景特效 (保留) */
     .bg-rays { position: fixed; inset: 0; pointer-events: none; background: repeating-linear-gradient(135deg, rgba(180, 187, 207, 0.35) 0, rgba(180, 187, 207, 0.35) 1px, transparent 3px, transparent 10px); opacity: 0.06; z-index: 0; }
     .bg-glow { position: fixed; inset: -30%; pointer-events: none; background: radial-gradient(circle at 10% 0%, rgba(247, 217, 138, 0.55), transparent 60%), radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.95), transparent 55%), radial-gradient(circle at 90% 100%, rgba(197, 208, 240, 0.55), transparent 55%); mix-blend-mode: screen; animation: glowMove 18s ease-in-out infinite alternate; z-index: 0; }
     @keyframes glowMove { 0% { transform: translate3d(-4%, 0, 0) scale(1); } 50% { transform: translate3d(4%, -2%, 0) scale(1.03); } 100% { transform: translate3d(-2%, 2%, 0) scale(1.01); } }
-    .bg-stars { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(rgba(247, 217, 138, 0.95) 0.9px, transparent 0.9px) 0 0 / 3px 3px, radial-gradient(rgba(255, 243, 199, 0.95) 1.1px, transparent 1.1px) 40px 60px / 4px 4px, transparent; opacity: 0.36; mix-blend-mode: soft-light; z-index: 0; animation: starsDrift 40s linear infinite alternate; }
-    @keyframes starsDrift { 0% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(-25px, 15px, 0); } 100% { transform: translate3d(20px, -10px, 0); } }
     
-    /* 流星 */
     .bg-meteors { position: fixed; inset: -10%; pointer-events: none; z-index: 1; overflow: hidden; }
-    .meteor-trail { position: absolute; left: 0; top: 0; width: 260px; height: 3px; background: linear-gradient(90deg, rgba(247, 217, 138, 0), rgba(247, 217, 138, 1), rgba(247, 217, 138, 0)); opacity: 0; border-radius: 999px; filter: drop-shadow(0 0 10px rgba(247, 217, 138, 0.9)); transform-origin: left center; animation-timing-function: linear; animation-iteration-count: infinite; }
-    @keyframes meteorCurve1 { 0% { transform: translate3d(0, 0, 0) rotate(22deg); opacity: 0; } 10% { opacity: 1; } 45% { transform: translate3d(-260px, 120px, 0) rotate(26deg); opacity: 1; } 100% { transform: translate3d(-520px, 260px, 0) rotate(30deg); opacity: 0; } }
-    @keyframes meteorCurve2 { 0% { transform: translate3d(0, 0, 0) rotate(30deg); opacity: 0; } 12% { opacity: 1; } 50% { transform: translate3d(-220px, 160px, 0) rotate(26deg); opacity: 1; } 100% { transform: translate3d(-480px, 320px, 0) rotate(22deg); opacity: 0; } }
-    @keyframes meteorCurve3 { 0% { transform: translate3d(0, 0, 0) rotate(18deg); opacity: 0; } 8% { opacity: 1; } 40% { transform: translate3d(-200px, 90px, 0) rotate(24deg); opacity: 1; } 100% { transform: translate3d(-450px, 250px, 0) rotate(30deg); opacity: 0; } }
+    .meteor-trail { position: absolute; width: 260px; height: 3px; background: linear-gradient(90deg, transparent, var(--gold-soft), transparent); opacity: 0; border-radius: 999px; filter: drop-shadow(0 0 10px var(--gold-soft)); transform-origin: left center; animation-timing-function: linear; animation-iteration-count: infinite; }
     .meteor-curve-1 { animation-name: meteorCurve1; } .meteor-curve-2 { animation-name: meteorCurve2; } .meteor-curve-3 { animation-name: meteorCurve3; }
-
-    /* 漣漪 */
+    @keyframes meteorCurve1 { 0% { transform: translate3d(0,0,0) rotate(22deg); opacity:0; } 10% { opacity:1; } 45% { transform: translate3d(-260px,120px,0) rotate(26deg); opacity:1; } 100% { transform: translate3d(-520px,260px,0) rotate(30deg); opacity:0; } }
+    @keyframes meteorCurve2 { 0% { transform: translate3d(0,0,0) rotate(30deg); opacity:0; } 12% { opacity:1; } 50% { transform: translate3d(-220px,160px,0) rotate(26deg); opacity:1; } 100% { transform: translate3d(-480px,320px,0) rotate(22deg); opacity:0; } }
+    @keyframes meteorCurve3 { 0% { transform: translate3d(0,0,0) rotate(18deg); opacity:0; } 8% { opacity:1; } 40% { transform: translate3d(-200px,90px,0) rotate(24deg); opacity:1; } 100% { transform: translate3d(-450px,250px,0) rotate(30deg); opacity:0; } }
+    
     .ripple-overlay { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(circle at var(--ripple-x) var(--ripple-y), rgba(247, 217, 138, 0.7) 0%, rgba(247, 217, 138, 0.45) 13%, rgba(247, 217, 138, 0.18) 34%, transparent 72%); opacity: 0; transform: scale(0.7); z-index: 2; }
     .ripple-overlay.active { animation: ripple 0.9s ease-out forwards; }
     @keyframes ripple { 0% { opacity: 0.6; transform: scale(0.7); } 100% { opacity: 0; transform: scale(2.4); } }
 
-    /* 主要容器 */
+    /* =========================================
+       2. 介面佈局 (登入框固定大小，不變形)
+       ========================================= */
     .app { position: relative; z-index: 3; max-width: 1200px; margin: 0 auto; padding: 24px 16px 32px; }
     .screen { display: none; }
     .screen.active { display: block; }
     .center-layout { min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center; }
+    
     .panel { width: 100%; max-width: 520px; padding: 26px 22px 20px; border-radius: var(--radius-lg); background: var(--bg-panel); border: 1px solid var(--border-soft); box-shadow: var(--shadow-soft); }
     
     .title-lg { text-align: left; font-size: 22px; letter-spacing: 3px; font-weight: 700; margin-bottom: 4px; color: var(--gold); }
@@ -81,27 +74,7 @@
     
     .error-box { margin-top: 10px; padding: 8px 11px; border-radius: var(--radius-md); background: #ffe8ea; border: 1px solid #ffadb5; color: #bc2033; font-size: 12px; text-align: center; }
 
-    /* 後台樣式 */
-    .admin-panel { margin-top: 16px; padding-top: 10px; border-top: 1px dashed var(--border-soft); display: none; }
-    .admin-panel.active { display: block; }
-    .admin-title { font-size: 12px; font-weight: 600; color: var(--text-sub); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-    .admin-input-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
-    .admin-input-row .input { margin-bottom: 0; flex: 1 1 150px; }
-    .btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 6px; }
-
-    /* 新增：後台表格與狀態標籤 */
-    .code-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11px; color: var(--text-sub); }
-    .code-table th { padding: 8px 4px; border-bottom: 2px solid #edf0f5; text-align: left; font-weight: 600; color: var(--text-main); }
-    .code-table td { padding: 8px 4px; border-bottom: 1px solid #edf0f5; text-align: left; vertical-align: middle; }
-    
-    .badge { padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; display: inline-block; }
-    .badge-gray { background-color: #b0b3b8; }   /* 未使用 */
-    .badge-green { background-color: #2ecc71; }  /* 使用中 */
-    .badge-red { background-color: #e74c3c; }    /* 已停用 */
-    
-    .btn-group { display: flex; gap: 4px; }
-
-    .badge-empty { font-size: 11px; color: var(--text-gray); margin-top: 4px; }
+    .admin-panel { display: none; } /* 隱藏舊版後台 */
 
     /* 遊戲與機台列表 CSS */
     .game-panel { max-width: 720px; padding: 20px 18px 18px; border-radius: var(--radius-lg); border: 1px solid var(--border-soft); background: var(--bg-panel); box-shadow: var(--shadow-soft); margin: 0 auto; }
@@ -158,19 +131,98 @@
     .signal-confirm { width: 100%; border-radius: 999px; border: none; padding: 10px 16px; font-size: 13px; font-weight: 600; background: linear-gradient(120deg, #ffe9b6, #f0c56a); color: #5b3a04; cursor: pointer; box-shadow: 0 10px 22px rgba(209, 167, 72, 0.4); transition: var(--transition-fast); }
     .signal-confirm:hover { filter: brightness(1.05); transform: translateY(-1px); }
 
-    .loading-overlay { position: fixed; inset: 0; background: radial-gradient(circle at center, rgba(255, 255, 255, 0.96), rgba(228, 233, 245, 0.96)); display: none; align-items: center; justify-content: center; z-index: 20; }
+    .loading-overlay { position: fixed; inset: 0; background: radial-gradient(circle at center, rgba(255, 255, 255, 0.96), rgba(228, 233, 245, 0.96)); display: none; align-items: center; justify-content: center; z-index: 2000; }
     .loading-overlay.active { display: flex; }
     .loader { display: flex; flex-direction: column; align-items: center; gap: 8px; }
     .spinner { width: 32px; height: 32px; border-radius: 50%; border: 3px solid rgba(198, 204, 221, 0.4); border-top-color: var(--gold); animation: spin 0.8s linear infinite; }
     .loader-text { font-size: 12px; color: var(--text-sub); }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* =========================================
+       3. ⭐ 優化版：獨立大型後台管理視窗 (Align Fix)
+       ========================================= */
+    .admin-overlay { 
+      position: fixed; inset: 0; z-index: 9999; 
+      background: rgba(34, 37, 47, 0.6); backdrop-filter: blur(8px); 
+      display: none; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .admin-overlay.active { display: flex; opacity: 1; }
+    
+    .admin-window { 
+      width: 90%; max-width: 1000px; height: 85vh; 
+      background: #fff; border-radius: 20px; 
+      box-shadow: 0 25px 80px rgba(0,0,0,0.25);
+      display: flex; flex-direction: column; overflow: hidden;
+      transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .admin-overlay.active .admin-window { transform: scale(1); }
+
+    /* 標題列 */
+    .admin-header { 
+      padding: 16px 24px; border-bottom: 1px solid #edf0f5; 
+      display: flex; justify-content: space-between; align-items: center; 
+      background: #fff; z-index: 10;
+    }
+    .admin-title-text { font-size: 18px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+    .admin-tools { display: flex; gap: 8px; }
+    
+    .btn-tool { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #e0e3ec; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; font-size: 16px; color: #666; }
+    .btn-tool:hover { background: #f5f6fa; transform: rotate(180deg); color: #3498db; }
+    .btn-tool.close:hover { color: #ff5f6c; border-color: #ffadb5; background: #fff0f1; transform: rotate(90deg); }
+
+    /* 內容區 */
+    .admin-content { flex: 1; overflow-y: auto; padding: 24px; background: #f8f9fb; }
+    
+    /* ⭐ 優化：輸入表單排列 */
+    .admin-form-box { 
+      background: #fff; padding: 20px; border-radius: 16px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 20px; 
+      border: 1px solid #edf0f5; 
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    }
+    .admin-form-box .input { flex: 1; min-width: 180px; margin-bottom: 0; background: #fff; border: 1px solid #e0e3ec; }
+    .admin-form-box button { flex: 0 0 auto; width: auto; padding: 0 24px; height: 42px; }
+
+    /* ⭐ 優化：表格對齊與樣式 */
+    .table-responsive { background: #fff; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #edf0f5; overflow: hidden; }
+    .admin-table { width: 100%; border-collapse: collapse; min-width: 800px; }
+    .admin-table th { 
+      background: #fff; padding: 15px 20px; 
+      text-align: left; font-size: 13px; color: var(--text-sub); 
+      border-bottom: 2px solid #f0f2f5; font-weight: 700; 
+      white-space: nowrap;
+    }
+    .admin-table td { 
+      padding: 14px 20px; border-bottom: 1px solid #f0f2f5; 
+      font-size: 14px; color: var(--text-main); vertical-align: middle; 
+    }
+    .admin-table tr:hover { background: #fcfcfc; }
+
+    /* 標籤 */
+    .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-block; white-space: nowrap; }
+    .status-badge.unused { background: #eff2f7; color: #64748b; }
+    .status-badge.used { background: #dcfce7; color: #166534; }
+    .status-badge.disabled { background: #fee2e2; color: #991b1b; }
+    .count-badge { background: #e0f2fe; color: #0284c7; font-family: monospace; margin-left: 6px; }
+
+    /* 按鈕群組 (強制不換行) */
+    .btn-row { display: flex; gap: 6px; white-space: nowrap; }
+    .btn-mini { 
+      padding: 6px 12px; border-radius: 6px; font-size: 12px; 
+      border: none; color: #fff; cursor: pointer; transition: 0.2s; 
+      display: inline-flex; align-items: center; gap: 4px; 
+    }
+    .btn-mini:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-blue { background: #3b82f6; }
+    .btn-orange { background: #f59e0b; }
+    .btn-purple { background: #8b5cf6; }
+    .btn-red { background: #ef4444; }
+
     @media (max-width: 768px) {
       .app { padding: 18px 12px 28px; }
-      .panel, .game-panel { padding: 20px 16px 14px; }
-      .page-header { flex-direction: column; align-items: flex-start; }
-      .chip-row { justify-content: flex-start; }
-      .machine-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+      .admin-form-box { flex-direction: column; align-items: stretch; }
+      .admin-form-box button { width: 100%; }
     }
   </style>
 
@@ -199,6 +251,46 @@
     </div>
   </div>
 
+  <div class="admin-overlay" id="adminModal">
+    <div class="admin-window">
+      <div class="admin-header">
+        <div class="admin-title-text">
+          <span style="color:var(--gold);">●</span> 授權碼管理控制台
+        </div>
+        <div class="admin-tools">
+          <button class="btn-tool refresh" id="adminRefresh" title="重新整理">↻</button>
+          <button class="btn-tool close" id="adminClose" title="關閉">✕</button>
+        </div>
+      </div>
+      
+      <div class="admin-content">
+        <div class="admin-form-box">
+          <input id="adminCodeInput" class="input" placeholder="授權碼 (如: GC-888)" />
+          <input id="adminExpireInput" class="input" type="date" title="到期日" />
+          <input id="adminRemarkInput" class="input" placeholder="備註 (如: 客戶姓名)" />
+          <button class="btn btn-primary" id="btnAddCode">儲存 / 更新資料</button>
+        </div>
+
+        <div class="table-responsive">
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width:20%">授權碼</th>
+                  <th style="width:20%">備註</th>
+                  <th style="width:15%">到期日</th>
+                  <th style="width:15%">狀態 / 次數</th>
+                  <th style="width:30%">操作</th>
+                </tr>
+              </thead>
+              <tbody id="codeTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="app">
     <div class="screen active" id="screenLogin">
       <div class="center-layout">
@@ -214,20 +306,6 @@
           <button class="btn btn-primary" id="btnVerify">驗證並進入系統</button>
           <button class="btn btn-outline" id="btnToggleAdmin">管理授權碼</button>
           <div class="error-box" id="loginError" style="display:none;"></div>
-
-          <div class="admin-panel" id="adminPanel">
-            <div class="admin-title">授權碼管理後台</div>
-            <div class="admin-input-row">
-              <input id="adminCodeInput" class="input" placeholder="授權碼，例如 GC-2025-001" />
-              <input id="adminExpireInput" class="input" type="date" />
-              <button class="btn btn-primary btn-sm" id="btnAddCode">新增授權碼</button>
-            </div>
-            <table class="code-table">
-              <thead><tr><th style="width:30%">授權碼</th><th style="width:25%">到期日</th><th style="width:15%">狀態</th><th>操作</th></tr></thead>
-              <tbody id="codeTableBody"></tbody>
-            </table>
-            <div class="badge-empty" id="emptyCodesHint">無資料</div>
-          </div>
         </div>
       </div>
     </div>
@@ -302,7 +380,7 @@
     let currentEditingId = null;
     let currentUserDocId = null; // ⭐ 全域變數：紀錄目前登入的 ID
 
-    // 2. 登入邏輯 (紀錄使用者 ID，以利登出時修改狀態)
+    // 2. 登入邏輯
     function getTodayDate() { const now = new Date(); now.setHours(0,0,0,0); return now; }
 
     async function isLicenseValid(code) {
@@ -324,11 +402,13 @@
             }
           }
 
-          // ⭐ 登入成功：更新狀態為 used，並紀錄 docId
+          // ⭐ 登入成功：更新狀態為 used，次數+1
           currentUserDocId = doc.id;
-          if (data.status !== "used") {
-            await db.collection("licenses").doc(doc.id).update({ status: "used" });
-          }
+          await db.collection("licenses").doc(doc.id).update({ 
+            status: "used",
+            useCount: firebase.firestore.FieldValue.increment(1)
+          });
+          
           return { valid: true };
         }
       } catch (e) { console.error(e); return { valid: false, msg: "系統錯誤" }; }
@@ -351,67 +431,75 @@
       showScreen("game");
     };
 
-    // ⭐ 登出邏輯修正：登出時改回 unused
+    // 登出邏輯
     document.getElementById("btnLogout").onclick = async () => {
       if (currentUserDocId) {
-        // 嘗試將狀態改回 unused
         db.collection("licenses").doc(currentUserDocId).update({ status: "unused" }).catch(e=>console.log(e));
         currentUserDocId = null;
       }
       showScreen("login");
     };
 
-    // ⭐ 視窗關閉監聽 (嘗試在關閉分頁時釋放狀態)
     window.addEventListener("beforeunload", () => {
       if (currentUserDocId) {
-         // 注意：這裡不一定保證每次關閉視窗都會成功送出，取決於瀏覽器速度
          db.collection("licenses").doc(currentUserDocId).update({ status: "unused" });
       }
     });
 
-    // 3. 後台管理
+    // 3. 後台管理 (獨立大視窗)
+    const adminModal = document.getElementById("adminModal");
+    
     document.getElementById("btnToggleAdmin").onclick = () => {
-      const p = document.getElementById("adminPanel");
-      if (!p.classList.contains("active")) {
-        if (prompt("請輸入管理者密碼：") !== ADMIN_PASSWORD) return alert("密碼錯誤");
-      }
-      p.classList.toggle("active");
-      if (p.classList.contains("active")) renderCodeTable();
+      if (prompt("請輸入管理者密碼：") !== ADMIN_PASSWORD) return alert("密碼錯誤");
+      adminModal.classList.add("active");
+      renderCodeTable();
+    };
+
+    document.getElementById("adminClose").onclick = () => {
+      adminModal.classList.remove("active");
+    };
+    
+    document.getElementById("adminRefresh").onclick = () => {
+      renderCodeTable(); // 重新整理
     };
 
     async function renderCodeTable() {
       const tbody = document.getElementById("codeTableBody");
       tbody.innerHTML = "";
-      document.getElementById("emptyCodesHint").style.display = "none";
       const today = getTodayDate();
 
       try {
         const snap = await db.collection("licenses").orderBy("code").get();
-        if (snap.empty) { document.getElementById("emptyCodesHint").style.display = "block"; return; }
-
         for (const doc of snap.docs) {
           const data = doc.data();
           
+          // 過期刪除檢查
           let expireStr = (data.expire || "").trim().replace(/\//g, '-');
           if (expireStr && new Date(expireStr) < today) {
              await db.collection("licenses").doc(doc.id).delete();
              continue; 
           }
 
-          let badge = '<span class="badge badge-gray">未使用</span>';
-          if (data.status === "used") badge = '<span class="badge badge-green">使用中</span>';
-          if (data.status === "disabled") badge = '<span class="badge badge-red">已停用</span>';
+          let tagClass = "unused";
+          let tagText = "未使用";
+          if (data.status === "used") { tagClass="used"; tagText="使用中"; }
+          if (data.status === "disabled") { tagClass="disabled"; tagText="已停用"; }
 
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td>${data.code}</td>
+            <td><div style="font-weight:bold;">${data.code}</div></td>
+            <td><div style="color:#555;">${data.remark || "-"}</div></td>
             <td>${data.expire || "永久"}</td>
-            <td>${badge}</td>
             <td>
-              <div class="btn-group">
-                <button class="btn-sm" style="background:#3498db;color:#fff;border:none;cursor:pointer" onclick="editLicense('${doc.id}','${data.code}','${data.expire||''}')">編輯</button>
-                <button class="btn-sm" style="background:#f39c12;color:#fff;border:none;cursor:pointer" onclick="toggleStatus('${doc.id}','${data.status}')">${data.status==='disabled'?'啟用':'停用'}</button>
-                <button class="btn-sm" style="background:#ff5f6c;color:#fff;border:none;cursor:pointer" onclick="delLicense('${doc.id}','${data.code}')">刪除</button>
+              <span class="status-badge ${tagClass}">${tagText}</span>
+              <span class="status-badge count-badge" title="使用次數">${data.useCount || 0}次</span>
+            </td>
+            <td>
+              <div class="btn-row">
+                <button class="btn-mini btn-blue" onclick="editLicense('${doc.id}','${data.code}','${data.expire||''}','${data.remark||''}')">編輯</button>
+                <button class="btn-mini btn-orange" onclick="toggleStatus('${doc.id}','${data.status}')">狀態</button>
+                <button class="btn-mini btn-purple" onclick="resetCount('${doc.id}')">歸零</button>
+                <button class="btn-mini btn-red" onclick="delLicense('${doc.id}','${data.code}')">刪除</button>
               </div>
             </td>
           `;
@@ -420,19 +508,26 @@
       } catch (e) { console.error(e); }
     }
 
-    window.editLicense = (id, code, expire) => {
+    window.editLicense = (id, code, expire, remark) => {
       document.getElementById("adminCodeInput").value = code;
       document.getElementById("adminExpireInput").value = expire;
+      document.getElementById("adminRemarkInput").value = remark;
       currentEditingId = id;
-      const btn = document.getElementById("btnAddCode");
-      btn.textContent = "確認修改";
-      btn.style.background = "#27ae60";
+      document.getElementById("btnAddCode").textContent = "確認修改";
     };
 
     window.toggleStatus = async (id, currentStatus) => {
       const newStatus = (currentStatus === "disabled") ? "unused" : "disabled"; 
       await db.collection("licenses").doc(id).update({ status: newStatus });
       renderCodeTable();
+    };
+    
+    // ⭐ 歸零功能
+    window.resetCount = async (id) => {
+      if(confirm("確定要將使用次數歸零嗎？")) {
+        await db.collection("licenses").doc(id).update({ useCount: 0 });
+        renderCodeTable();
+      }
     };
 
     window.delLicense = async (id, code) => {
@@ -446,25 +541,25 @@
     function resetAdminInput() {
       document.getElementById("adminCodeInput").value = "";
       document.getElementById("adminExpireInput").value = "";
+      document.getElementById("adminRemarkInput").value = "";
       currentEditingId = null;
-      const btn = document.getElementById("btnAddCode");
-      btn.textContent = "新增授權碼";
-      btn.style.background = "";
+      document.getElementById("btnAddCode").textContent = "儲存 / 更新資料";
     }
 
     document.getElementById("btnAddCode").onclick = async () => {
       const code = document.getElementById("adminCodeInput").value.trim();
       const expire = document.getElementById("adminExpireInput").value.trim();
+      const remark = document.getElementById("adminRemarkInput").value.trim();
       if (!code) return alert("請輸入代碼");
 
       try {
         if (currentEditingId) {
-          await db.collection("licenses").doc(currentEditingId).update({ code, expire });
+          await db.collection("licenses").doc(currentEditingId).update({ code, expire, remark });
           alert("修改完成");
         } else {
           const dup = await db.collection("licenses").where("code", "==", code).get();
           if (!dup.empty) return alert("代碼已存在");
-          await db.collection("licenses").add({ code, expire, status: "unused", created: new Date().toISOString() });
+          await db.collection("licenses").add({ code, expire, remark, status: "unused", useCount: 0, created: new Date().toISOString() });
           alert("新增成功");
         }
         resetAdminInput();
